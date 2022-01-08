@@ -14,6 +14,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2.4.0
+        with:
+          submodules: true
       - uses: google-github-actions/auth@v0.4.4
         with:
           project_id: ${{ secrets.CONTAINER_REGISTRY_PROJECT_ID }}
@@ -33,21 +35,21 @@ jobs:
       - name: manage base images
         run: |
           # Grab the build base image in our private registry
-          baseImage=$(cat ${_APP_NAME}/Dockerfile | grep 'FROM alpine')
+          baseImage=$(cat Dockerfile | grep 'FROM alpine')
           baseImage=($baseImage)
           docker pull ${baseImage[1]}
           newImage=$(echo ${baseImage[1]} | sed "s,alpine,${_CONTAINER_REGISTRY_NAME}/alpine,g")
           docker tag ${baseImage[1]} $newImage
           docker push $newImage
           # Grab the runtime base image in our private registry
-          baseImage=$(cat ${_APP_NAME}/Dockerfile | grep 'FROM nginxinc')
+          baseImage=$(cat Dockerfile | grep 'FROM nginxinc')
           baseImage=($baseImage)
           docker pull ${baseImage[1]}
           newImage=$(echo ${baseImage[1]} | sed "s,nginxinc,${_CONTAINER_REGISTRY_NAME},g")
           docker tag ${baseImage[1]} $newImage
           docker push $newImage
           # Use the base images from our own private registry
-          sed -i "s,FROM alpine,FROM ${_CONTAINER_REGISTRY_NAME}/alpine,g;s,FROM nginxinc,FROM ${_CONTAINER_REGISTRY_NAME},g" ${_APP_NAME}/Dockerfile
+          sed -i "s,FROM alpine,FROM ${_CONTAINER_REGISTRY_NAME}/alpine,g;s,FROM nginxinc,FROM ${_CONTAINER_REGISTRY_NAME},g" Dockerfile
       - name: build container
         run: |
           docker build --tag ${IMAGE_NAME} .
