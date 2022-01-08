@@ -9,7 +9,8 @@ Put this https://alwaysupalwayson.com/asm-security as a workshop.
 1. Setup Sidecar
 1. Setup AuthorizationPolicies
 1. Setuo Ingress Gateway
-1. Setup Egress Gateway  
+1. Setup Egress Gateway
+1. Setup NetworkPolicies
 
 Rk:
 - Do the same with BankOfAnthos?
