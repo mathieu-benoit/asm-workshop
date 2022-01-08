@@ -38,18 +38,18 @@ jobs:
           baseImage=$(cat Dockerfile | grep 'FROM alpine')
           baseImage=($baseImage)
           docker pull ${baseImage[1]}
-          newImage=$(echo ${baseImage[1]} | sed "s,alpine,${_CONTAINER_REGISTRY_NAME}/alpine,g")
+          newImage=$(echo ${baseImage[1]} | sed "s,alpine,${IMAGE_BASE_NAME}/alpine,g")
           docker tag ${baseImage[1]} $newImage
           docker push $newImage
           # Grab the runtime base image in our private registry
           baseImage=$(cat Dockerfile | grep 'FROM nginxinc')
           baseImage=($baseImage)
           docker pull ${baseImage[1]}
-          newImage=$(echo ${baseImage[1]} | sed "s,nginxinc,${_CONTAINER_REGISTRY_NAME},g")
+          newImage=$(echo ${baseImage[1]} | sed "s,nginxinc,${IMAGE_BASE_NAME},g")
           docker tag ${baseImage[1]} $newImage
           docker push $newImage
           # Use the base images from our own private registry
-          sed -i "s,FROM alpine,FROM ${_CONTAINER_REGISTRY_NAME}/alpine,g;s,FROM nginxinc,FROM ${_CONTAINER_REGISTRY_NAME},g" Dockerfile
+          sed -i "s,FROM alpine,FROM ${IMAGE_BASE_NAME}/alpine,g;s,FROM nginxinc,FROM ${IMAGE_BASE_NAME},g" Dockerfile
       - name: build container
         run: |
           docker build --tag ${IMAGE_NAME} .
