@@ -1,0 +1,19 @@
+baseurl = "/"
+languageCode = "en-us"
+defaultContentLanguage = "en"
+theme = "hugo-theme-learn"
+enableRobotsTXT = true
+# googleAnalytics = 'FIXME'
+
+[outputs]
+  home = [ "HTML", "RSS", "JSON"]
+
+[params]
+  defaultTheme = "dark"
+
+  editURL = "https://github.com/rafik8/istio-workshop/edit/master/content/"
+  description = "Anthos Service Mesh (ASM) Workshop"
+  author = "Mathieu Benoit"
+  showVisitedLinks = true
+  disableBreadcrumb = false
+  disableNextPrev = false
