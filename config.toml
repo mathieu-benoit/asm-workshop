@@ -3,14 +3,12 @@ languageCode = "en-us"
 defaultContentLanguage = "en"
 theme = "hugo-theme-learn"
 enableRobotsTXT = true
-# googleAnalytics = 'FIXME'
+googleAnalytics = 'G-34LNWT3M12'
 
 [outputs]
   home = [ "HTML", "RSS", "JSON"]
 
 [params]
-  defaultTheme = "dark"
-
   editURL = "https://github.com/mathieu-benoit/asm-workshop/edit/master/content/"
   description = "Anthos Service Mesh (ASM) Workshop"
   author = "Mathieu Benoit"
