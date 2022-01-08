@@ -19,6 +19,7 @@ Put this https://alwaysupalwayson.com/asm-security as a workshop.
 
 Further considerations:
 - Do the same with BankOfAnthos?
+- What about Kubernetes RBAC where we could distinguish sec, dev, ops folks/authz and which resource kinds or namespaces they could touch?
 - Multi-cluster?
 - MCP (control/data plane)?
 - Integrate CRfA in there? Or do another similar crfa-workshop?
