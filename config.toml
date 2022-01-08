@@ -11,7 +11,7 @@ enableRobotsTXT = true
 [params]
   defaultTheme = "dark"
 
-  editURL = "https://github.com/rafik8/istio-workshop/edit/master/content/"
+  editURL = "https://github.com/mathieu-benoit/asm-workshop/edit/master/content/"
   description = "Anthos Service Mesh (ASM) Workshop"
   author = "Mathieu Benoit"
   showVisitedLinks = true
