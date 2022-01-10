@@ -85,3 +85,6 @@ a:hover {
     padding: 7px 0;
     border-bottom: 4px solid var(--MENU-HEADER-BG-color);
 }
+#chapter p {
+    text-align: left;
+}
