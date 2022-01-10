@@ -4,8 +4,8 @@
 
 Put this https://alwaysupalwayson.com/asm-security as a workshop.
 
-1. [ ] Create a GKE cluster
-1. [ ] Install ASM
+1. [X] Create a GKE cluster
+1. [X] Install ASM
 1. [ ] Ingress Gateway
 1. [ ] Egress Gateway
 1. [ ] Install OnlineBoutique
@@ -14,6 +14,7 @@ Put this https://alwaysupalwayson.com/asm-security as a workshop.
 1. [ ] AuthorizationPolicies
 1. [ ] NetworkPolicies
 1. [ ] Policy Controller
+1. [ ] Config Sync
 1. [ ] Monitoring: Topology, SLOs, Traces, etc.
 1. [ ] Misc: any Istio's features about traffic management, etc.
 
