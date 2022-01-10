@@ -1,7 +1,7 @@
 ---
 title: "Configure auto mTLS STRICT"
 chapter: true
-weight: 7
+weight: 6
 ---
 In this section we will configure auto `mTLS` `STRICT` in order to improve the security within the mesh.
 

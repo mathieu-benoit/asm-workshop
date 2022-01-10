@@ -1,7 +1,7 @@
 ---
 title: "Configure AuthorizationPolicies"
 chapter: true
-weight: 9
+weight: 8
 ---
 In this section we will configure `AuthorizationPolicies` in order to improve the security within the mesh.
 

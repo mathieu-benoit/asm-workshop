@@ -1,7 +1,7 @@
 ---
 title: "Secure Ingress Gateway"
 chapter: true
-weight: 5
+weight: 10
 ---
 In this section you will secure the Ingress Gateway previously deployed.
 

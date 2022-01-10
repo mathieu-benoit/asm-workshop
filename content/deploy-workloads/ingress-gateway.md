@@ -15,4 +15,5 @@ kubectl label namespace $INGRESS_GATEWAY_NAMESPACE istio-injection- istio.io/rev
 FIXME - grab and deploy deployment, service, etc.
 
 Official resources:
+- [Istio - Installing Gateways](https://istio.io/latest/docs/setup/additional-setup/gateway)
 - [Docs - ASM Installing and upgrading gateways](https://cloud.google.com/service-mesh/docs/gateways)
