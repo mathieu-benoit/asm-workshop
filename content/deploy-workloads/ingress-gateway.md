@@ -57,7 +57,6 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: ${INGRESS_GATEWAY_NAME}
-EOF
 ---
 # Set up roles to allow reading credentials for TLS
 apiVersion: rbac.authorization.k8s.io/v1
