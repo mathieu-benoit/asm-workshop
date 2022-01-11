@@ -5,16 +5,18 @@ weight: 1
 
 In this section, you will deploy the Ingress Gateway in its own namespace as you will do for any other workload.
 
+Create the namespace:
 ```Bash
 export INGRESS_GATEWAY_NAMESPACE=asm-ingress
-export INGRESS_GATEWAY_NAME=asm-ingressgateway
-export INGRESS_GATEWAY_LABEL="asm: ingressgateway"
 kubectl create namespace $INGRESS_GATEWAY_NAMESPACE
 ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
 kubectl label namespace $INGRESS_GATEWAY_NAMESPACE istio-injection- istio.io/rev=$ASM_VERSION --overwrite
 ```
 
+Deploy the Ingress Gateway exposed (for now) as public endpoint (L4 load balancer):
 ```Bash
+export INGRESS_GATEWAY_NAME=asm-ingressgateway
+export INGRESS_GATEWAY_LABEL="asm: ingressgateway"
 cat <<EOF | kubectl apply -n $INGRESS_GATEWAY_NAMESPACE -f -
 apiVersion: v1
 kind: Service
@@ -41,17 +43,21 @@ spec:
   template:
     metadata:
       annotations:
-        # Select the gateway injection template (rather than the default sidecar template)
+        # This is required to tell Anthos Service Mesh to inject the gateway with the required configuration.
         inject.istio.io/templates: gateway
       labels:
-        # Set a unique label for the gateway. This is required to ensure Gateways can select this workload
         ${INGRESS_GATEWAY_LABEL}
-        # Enable gateway injection. If connecting to a revisioned control plane, replace with "istio.io/rev: revision-name"
-        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: istio-proxy
         image: auto # The image will automatically update each time the pod starts.
+      serviceAccountName: ${INGRESS_GATEWAY_NAME}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ${INGRESS_GATEWAY_NAME}
+EOF
 ---
 # Set up roles to allow reading credentials for TLS
 apiVersion: rbac.authorization.k8s.io/v1

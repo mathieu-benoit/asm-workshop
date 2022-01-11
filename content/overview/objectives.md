@@ -4,7 +4,7 @@ weight: 2
 ---
 
 
-This workshop is not about introducing to Istio nor Anthos Service Mesh (ASM), if you are not familiar with both and are looking for an introduction, here are the resources you could leverage before running this workshop:
+This workshop is not an introduction to Istio nor Anthos Service Mesh (ASM), if you are not familiar or you are just starting with their concepts, here are the resources you could leverage before running this workshop:
 - [Cloud Next 2021 - Managing microservice architectures with ASM](https://youtu.be/OeevDBEDAIA)
 - [Cloud Next 2020 - Building globally scalable services with Istio and ASM](https://youtu.be/clu7t0LVhcw)
 - [Istio by example](https://istiobyexample.dev/)
@@ -13,6 +13,7 @@ What it is not covered yet:
 - Muti-cluster Mesh
 - Multi-cluster Ingress and Service
 - Managed control and data plane
+- There is [this on-going backlog to improve this workshop]() too, feel free to contribute! ;)
 
 This workshop uses the following billable components of Google Cloud:
 - [Compute Engine](https://cloud.google.com/compute/pricing)

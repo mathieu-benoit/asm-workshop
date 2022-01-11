@@ -31,14 +31,19 @@ EOF
   --custom_overlay distroless-proxy.yaml
 ```
 
-_Not part of the workshop, but something to keep in mind when you will need to [upgrade to a newer version of ASM](https://cloud.google.com/service-mesh/docs/unified-install/plan-upgrade):_
+_Not part of the workshop, but here is the routine when you will need to run to [upgrade to a newer version of ASM](https://cloud.google.com/service-mesh/docs/unified-install/plan-upgrade):_
 
 ```Bash
-# Grab the current ASM version before upgrading to the new version:
+# Grab the current ASM version before upgrading to the new version
 OLD_ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
+# Doownload the new version of the `asmcli` tool
+curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.12 > ~/asmcli
+chmod +x ~/asmcli
+# Run the same `asmcli install` command we ran for the installation
+~/asmcli install...
 # Update the asm/istio labels of your namespaces
 kubectl rollout restart deployments -n FIXME
-# Once you have verified that your workloads and ASM is working properly, you could complete the upgrade of ASM by removing the the components of the old version:
+# Once you have verified that your workloads and ASM is working properly, you could complete the upgrade of ASM by removing the the components of the old version
 kubectl delete Service,Deployment,HorizontalPodAutoscaler,PodDisruptionBudget istiod-$OLD_ASM_VERSION -n istio-system --ignore-not-found=true
 kubectl delete IstioOperator installed-state-$OLD_ASM_VERSION -n istio-system
 ```

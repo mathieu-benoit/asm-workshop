@@ -10,7 +10,7 @@ googleAnalytics = 'G-34LNWT3M12'
 
 [params]
   editURL = "https://github.com/mathieu-benoit/asm-workshop/edit/master/content/"
-  description = "Anthos Service Mesh (ASM) Workshop"
+  description = "Anthos Service Mesh (ASM) security workshop"
   author = "Mathieu Benoit"
   showVisitedLinks = true
   disableBreadcrumb = false
