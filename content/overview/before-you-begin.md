@@ -6,7 +6,7 @@ Before you begin you need to make sure you have the prerequisites in place.
 
 You can run this workshop on Cloud Shell or on your local machine running Linux. Cloud Shell pre-installs all the required tools.
 
-Create a working directory where we will drop all the files needed for this workshop.
+Create a working directory where you will drop all the files needed for this workshop.
 ```Bash
 export WORKING_DIRECTORY=asm-workshop
 mkdir $WORKING_DIRECTORY

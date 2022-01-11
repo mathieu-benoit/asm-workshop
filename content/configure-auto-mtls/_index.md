@@ -8,4 +8,4 @@ In this section we will configure auto `mTLS` `STRICT` in order to improve the s
 {{% children showhidden="false" %}}
 
 Official resources:
-- [Tutorial - ASM auto mTLS](https://cloud.google.com/service-mesh/docs/by-example/mtls)
+- [ASM - Auto mTLS](https://cloud.google.com/service-mesh/docs/by-example/mtls)

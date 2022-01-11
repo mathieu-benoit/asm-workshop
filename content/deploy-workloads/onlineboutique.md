@@ -11,7 +11,13 @@ curl -LO https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-dem
 kubectl apply -f kubernetes-manifests.yaml -n $ONLINEBOUTIQUE_NAMESPACE
 ```
 
-Rk: wait for onlinboutique release tag > v0.3.4 to have all the profiler, trace, debugging, etc. environment variables disabled in the Kubernetes manifest under the release folder.
+Check that the pods are properly deployed and that you got the associated public IP:
+```Bash
+kubectl wait --for=condition=available --timeout=600s deployment --all -n $ONLINEBOUTIQUE_NAMESPACE
+kubectl get svc frontend -n $ONLINEBOUTIQUE_NAMESPACE -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
+```
+
+FIXME - add steps to replace redis by Memorystore
 
 Official resources:
 - [Tutorial - Deploying the Online Boutique sample application](https://cloud.google.com/service-mesh/docs/onlineboutique-install-kpt)

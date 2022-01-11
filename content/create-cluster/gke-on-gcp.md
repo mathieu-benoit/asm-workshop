@@ -34,6 +34,11 @@ gcloud container clusters create $GKE_NAME \
     --monitoring=SYSTEM
 ```
 
+You could wait and check that the GKE cluster has been provisioned properly:
+```Bash
+kubectl get nodes
+```
+
 Register the GKE cluster as an Anthos fleet:
 ```Bash
 gcloud services enable anthos.googleapis.com

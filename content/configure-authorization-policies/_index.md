@@ -8,4 +8,4 @@ In this section we will configure `AuthorizationPolicies` in order to improve th
 {{% children showhidden="false" %}}
 
 Official resources:
-- [Doc - ASM Authorization policy overview](https://cloud.google.com/service-mesh/docs/security/authorization-policy-overview)
+- [ASM - Authorization policy overview](https://cloud.google.com/service-mesh/docs/security/authorization-policy-overview)
