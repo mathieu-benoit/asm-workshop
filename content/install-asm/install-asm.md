@@ -31,8 +31,13 @@ EOF
   --custom_overlay distroless-proxy.yaml
 ```
 
-_Not part of the workshop, but here is the routine when you will need to run to [upgrade to a newer version of ASM](https://cloud.google.com/service-mesh/docs/unified-install/plan-upgrade):_
+Ensure that all deployments are up and running:
+```Bash
+kubectl wait --for=condition=available --timeout=600s deployment --all -n istio-system
+kubectl wait --for=condition=available --timeout=600s deployment --all -n asm-system
+```
 
+_Not part of the workshop, but here below is the routine when you will need to run to [upgrade to a newer version of ASM](https://cloud.google.com/service-mesh/docs/unified-install/plan-upgrade):_
 ```Bash
 # Grab the current ASM version before upgrading to the new version
 OLD_ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
@@ -48,5 +53,5 @@ kubectl delete Service,Deployment,HorizontalPodAutoscaler,PodDisruptionBudget is
 kubectl delete IstioOperator installed-state-$OLD_ASM_VERSION -n istio-system
 ```
 
-Official resources:
+Resources:
 - [Install ASM](https://cloud.google.com/service-mesh/docs/unified-install/install)

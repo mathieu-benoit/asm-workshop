@@ -4,7 +4,7 @@ weight: 1
 ---
 
 ```Bash
-export SECURITY_POLICY_NAME=$clusterName-asm-ingressgateway # Name hard-coded there: https://github.com/mathieu-benoit/my-kubernetes-deployments/tree/main/namespaces/asm-ingress/backendconfig.yaml
+export SECURITY_POLICY_NAME=$GKE_NAME-asm-ingressgateway
 gcloud compute security-policies create $SECURITY_POLICY_NAME \
     --description "Block XSS attacks"
 gcloud compute security-policies rules create 1000 \
@@ -21,7 +21,7 @@ gcloud compute security-policies update $SECURITY_POLICY_NAME \
     --enable-layer7-ddos-defense
 gcloud compute security-policies update $SECURITY_POLICY_NAME \
     --log-level=VERBOSE
-export SSL_POLICY_NAME=$SECURITY_POLICY_NAME # Name hard-coded there: https://github.com/mathieu-benoit/my-kubernetes-deployments/tree/main/namespaces/asm-ingress/frontendconfig.yaml
+export SSL_POLICY_NAME=$SECURITY_POLICY_NAME
 gcloud compute ssl-policies create $SSL_POLICY_NAME \
     --profile COMPATIBLE  \
     --min-tls-version 1.0

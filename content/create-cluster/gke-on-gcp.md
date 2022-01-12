@@ -34,7 +34,7 @@ gcloud container clusters create $GKE_NAME \
     --monitoring=SYSTEM
 ```
 
-You could wait and check that the GKE cluster has been provisioned properly:
+Wait and check that the GKE cluster has been provisioned properly:
 ```Bash
 kubectl get nodes
 ```

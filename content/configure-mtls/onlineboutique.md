@@ -1,10 +1,11 @@
 ---
-title: "Configure mTLS STRICT for OnlineBoutique"
+title: "Configure mTLS for OnlineBoutique"
 weight: 2
 ---
+In this section we will configure auto `mTLS` `STRICT` for the OnlineBoutique namespace.
 
 ```Bash
-cat <<EOF | kubectl apply -n $INGRESS_GATEWAY_NAMESPACE -f -
+cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:

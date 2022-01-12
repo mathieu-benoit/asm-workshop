@@ -3,17 +3,18 @@ title: "Setup Ingress Gateway"
 weight: 3
 ---
 
-{{%expand%}}
-```yaml
+
+```Bash
+cat <<EOF | kubectl apply -n $INGRESS_GATEWAY_NAMESPACE -f -
 apiVersion: v1
 kind: Service
 metadata:
-  name: asm-ingressgateway
+  name: ${INGRESS_GATEWAY_NAME}
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
-    cloud.google.com/backend-config: '{"default": "asm-ingressgateway"}'
+    cloud.google.com/backend-config: '{"default": "${INGRESS_GATEWAY_NAME}"}'
   labels:
-    asm: ingressgateway
+    ${INGRESS_GATEWAY_LABEL}
 spec:
   ports:
   - name: status-port
@@ -27,61 +28,51 @@ spec:
     port: 443
     targetPort: 8443
   selector:
-    asm: ingressgateway
+    ${INGRESS_GATEWAY_LABEL}
   type: ClusterIP
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: asm-ingressgateway
-spec:
-  selector:
-    matchLabels:
-      asm: ingressgateway
-  template:
-    metadata:
-      annotations:
-        inject.istio.io/templates: gateway
-      labels:
-        asm: ingressgateway
-    spec:
-      containers:
-      - name: istio-proxy
-        image: auto
 ---
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: asm-ingressgateway
+  name: ${INGRESS_GATEWAY_NAME}
 spec:
   healthCheck:
     requestPath: /healthz/ready
     port: 15021
     type: HTTP
   securityPolicy:
-    name: SECURITY_POLICY
+    name: ${SECURITY_POLICY_NAME}
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: ${INGRESS_GATEWAY_NAME}
+spec:
+  sslPolicy: ${SSL_POLICY_NAME}
+  redirectToHttps:
+    enabled: true
+    responseCodeName: MOVED_PERMANENTLY_DEFAULT
 ---
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: asm-ingressgateway
+  name: ${INGRESS_GATEWAY_NAME}
 spec:
   domains:
-    - "HOST_NAME"
+    - "${INGRESS_GATEWAY_HOST_NAME}"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: asm-ingressgateway
+  name: ${INGRESS_GATEWAY_NAME}
   annotations:
-    kubernetes.io/ingress.allow-http: "false"
-    kubernetes.io/ingress.global-static-ip-name: "IP_NAME"
-    networking.gke.io/managed-certificates: "asm-ingressgateway"
+    kubernetes.io/ingress.global-static-ip-name: "${INGRESS_GATEWAY_PUBLIC_IP_NAME}"
+    networking.gke.io/managed-certificates: "${INGRESS_GATEWAY_NAME}"
     kubernetes.io/ingress.class: "gce"
 spec:
   defaultBackend:
     service:
-      name: asm-ingressgateway
+      name: ${INGRESS_GATEWAY_NAME}
       port:
         number: 443
   rules:
@@ -91,29 +82,10 @@ spec:
         pathType: ImplementationSpecific
         backend:
           service:
-            name: asm-ingressgateway
+            name: ${INGRESS_GATEWAY_NAME}
             port:
               number: 443
----
-apiVersion: networking.istio.io/v1alpha3
-kind: Gateway
-metadata:
-  name: asm-ingressgateway
-spec:
-  selector:
-    asm: ingressgateway
-  servers:
-  - port:
-      number: 80
-      name: http
-      protocol: HTTP
-    hosts:
-    - "*"
+EOF
 ```
-{{% /expand%}}
 
-
-- Simple deployment?
-- Secure/unprivileged deployment
-- Rk: about internal or PSC for the endpoint
-- Ref about the e-2-m doc
+FIXME - add a section with unprivileged deployment too + Rk about PSC/Internal LB.

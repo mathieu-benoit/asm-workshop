@@ -2,7 +2,6 @@
 title: "Deploy Ingress Gateway"
 weight: 1
 ---
-
 In this section, you will deploy the Ingress Gateway in its own namespace as you will do for any other workload.
 
 Create the namespace:
@@ -13,7 +12,7 @@ ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.ite
 kubectl label namespace $INGRESS_GATEWAY_NAMESPACE istio-injection- istio.io/rev=$ASM_VERSION --overwrite
 ```
 
-Deploy the Ingress Gateway exposed (for now) as public endpoint (L4 load balancer):
+Deploy the IngressGateway exposed (for now) as public endpoint (L4 load balancer):
 ```Bash
 export INGRESS_GATEWAY_NAME=asm-ingressgateway
 export INGRESS_GATEWAY_LABEL="asm: ingressgateway"
@@ -78,16 +77,37 @@ roleRef:
   name: ${INGRESS_GATEWAY_NAME}
 subjects:
 - kind: ServiceAccount
-  name: default
+  name: ${INGRESS_GATEWAY_NAME}
 EOF
 ```
 
-Check that the pod is properly deployed and that you got the associated public IP:
+Ensure that all deployments are up and running:
 ```Bash
 kubectl wait --for=condition=available --timeout=600s deployment --all -n $INGRESS_GATEWAY_NAMESPACE
-kubectl get svc $INGRESS_GATEWAY_NAME -n $INGRESS_GATEWAY_NAMESPACE -o jsonpath="{.status.loadBalancer.ingress[*].ip}"
+INGRESS_GATEWAY_PUBLIC_IP=$(kubectl get svc $INGRESS_GATEWAY_NAME -n $INGRESS_GATEWAY_NAMESPACE -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
+curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
 ```
 
-Official resources:
+Create a [shared `Gateway`](https://istio.io/latest/docs/setup/additional-setup/gateway/#shared-gateway) resource in the Ingress Gateway namespace. Gateways are generally owned by the platform admins or network admins team. Therefore, the `Gateway` resource is created in the Ingress Gateway namespace owned by the platform admin and could be use in other namespaces via their own `VirtualService` entries.
+```Bash
+cat <<EOF | kubectl apply -n $INGRESS_GATEWAY_NAMESPACE -f -
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+    name: ${INGRESS_GATEWAY_NAME}
+spec:
+  selector:
+    ${INGRESS_GATEWAY_LABEL}
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - '*'
+EOF
+```
+
+Resources:
 - [Istio - Installing Gateways](https://istio.io/latest/docs/setup/additional-setup/gateway)
 - [Docs - ASM Installing and upgrading gateways](https://cloud.google.com/service-mesh/docs/gateways)

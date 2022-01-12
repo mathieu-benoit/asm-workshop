@@ -11,15 +11,46 @@ kubectl label namespace $ONLINEBOUTIQUE_NAMESPACE istio-injection- istio.io/rev=
 kubectl rollout restart deployments -n $ONLINEBOUTIQUE_NAMESPACE
 ```
 
-Test that 
+Ensure that all deployments are up and running:
 ```Bash
-
+kubectl wait --for=condition=available --timeout=600s deployment --all -n $ONLINEBOUTIQUE_NAMESPACE
+curl -s http://${ONLINEBOUTIQUE_PUBLIC_IP}
 ```
 
-Route traffic through the OnlineBoutique's `frontend` app via the Ingress Gateway:
-```Bash
+{{% notice note %}}
+When running `kubectl get pods -n $ONLINEBOUTIQUE_NAMESPACE` you should see `2/2` on the `READY` column for all the pods in the OnlineBoutique namespace.
+{{% /notice %}}
 
+Route traffic to the OnlineBoutique's `frontend` app through the Ingress Gateway:
+```Bash
+cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: frontend
+spec:
+  hosts:
+  - '*'
+  gateways:
+  - ${INGRESS_GATEWAY_NAMESPACE}/${INGRESS_GATEWAY_NAME}
+  http:
+  - route:
+    - destination:
+        host: frontend
+        port:
+          number: 80
+EOF
 ```
 
-Official resources:
+Ensure that the OnlineBoutique solution is now working from the Ingress Gateway public endpoint:
+```Bash
+curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
+```
+
+You could remove the `LoadBalancer` service `frontend-external` (not used moving forward) deployed earlier in this workshop:
+```Bash
+kubectl delete service frontend-external -n -n $ONLINEBOUTIQUE_NAMESPACE
+```
+
+Resources:
 - [ASM - Injecting sidecar proxies](https://cloud.google.com/service-mesh/docs/proxy-injection)

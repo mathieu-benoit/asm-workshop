@@ -5,11 +5,12 @@ weight: 2
 
 
 ```Bash
-export PUBLIC_IP_NAME=$clusterName-asm-ingressgateway # Name hard-coded there: https://github.com/mathieu-benoit/my-kubernetes-deployments/tree/main/namespaces/asm-ingress/ingress.yaml
-gcloud compute addresses create $PUBLIC_IP_NAME \
+export INGRESS_GATEWAY_HOST_NAME="frontend.endpoints.${PROJECT_ID}.cloud.goog"
+export INGRESS_GATEWAY_PUBLIC_IP_NAME=$GKE_NAME-asm-ingressgateway
+gcloud compute addresses create $INGRESS_GATEWAY_PUBLIC_IP_NAME \
     --global
-export PUBLIC_IP_ADDRESS=$(gcloud compute addresses describe $PUBLIC_IP_NAME --global --format "value(address)")
-echo ${PUBLIC_IP_ADDRESS}
+export INGRESS_GATEWAY_PUBLIC_IP=$(gcloud compute addresses describe $INGRESS_GATEWAY_PUBLIC_IP_NAME --global --format "value(address)")
+echo ${INGRESS_GATEWAY_PUBLIC_IP}
 ```
 
 ```Bash
@@ -20,10 +21,10 @@ info:
   title: "Cloud Endpoints DNS"
   version: "1.0.0"
 paths: {}
-host: "frontend.endpoints.${PROJECT_ID}.cloud.goog"
+host: "${INGRESS_GATEWAY_HOST_NAME}"
 x-google-endpoints:
-- name: "frontend.endpoints.${PROJECT_ID}.cloud.goog"
-  target: "${GCLB_IP}"
+- name: "${INGRESS_GATEWAY_HOST_NAME}"
+  target: "${INGRESS_GATEWAY_PUBLIC_IP}"
 EOF
 gcloud endpoints services deploy dns-spec.yaml
 ```

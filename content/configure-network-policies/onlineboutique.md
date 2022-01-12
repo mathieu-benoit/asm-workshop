@@ -1,8 +1,10 @@
 ---
-title: "Configure NetworkPolicies for OnlineBoutique"
+title: "Configure NetworkPolicy for OnlineBoutique"
 weight: 2
 ---
+In this section we will configure `NetworkPolicy` for the OnlineBoutique namespace.
 
+Deploy fine granular `NetworkPolicy` per app:
 ```Bash
 cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
 apiVersion: networking.k8s.io/v1
@@ -139,10 +141,10 @@ spec:
           app: loadgenerator
     - namespaceSelector:
         matchLabels:
-          name: asm-ingress
+          name: ${INGRESS_GATEWAY_NAMESPACE}
       podSelector:
         matchLabels:
-          app: asm-ingressgateway
+          app: ${INGRESS_GATEWAY_NAME}
     ports:
      - port: 8080
        protocol: TCP

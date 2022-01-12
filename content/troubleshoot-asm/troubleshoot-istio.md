@@ -48,5 +48,5 @@ ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.ite
 kubectl describe configmap istio-$ASM_VERSION -n istio-system
 ```
 
-Official resources:
+Resources:
 - [Troubleshooting ASM](https://cloud.google.com/service-mesh/docs/troubleshooting/troubleshoot-intro)

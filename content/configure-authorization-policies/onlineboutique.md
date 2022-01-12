@@ -1,10 +1,19 @@
 ---
-title: "Configure AuthorizationPolicies for OnlineBoutique"
+title: "Configure AuthorizationPolicy for OnlineBoutique"
 weight: 2
 ---
+In this section we will configure `AuthorizationPolicy` for the OnlineBoutique namespace.
 
+Deploy fine granular `AuthorizationPolicy` per app:
 ```Bash
 cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: deny-all
+spec:
+  {}
+---
 apiVersion: security.istio.io/v1beta1
 kind: AuthorizationPolicy
 metadata:
@@ -16,7 +25,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/frontend"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/frontend"]
     to:
       - operation:
           paths: ["/hipstershop.AdService/GetAds"]
@@ -34,7 +43,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/frontend", "cluster.local/ns/onlineboutique/sa/checkoutservice"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/frontend", "cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/checkoutservice"]
     to:
       - operation:
           paths: ["/hipstershop.CartService/AddItem", "/hipstershop.CartService/GetCart", "/hipstershop.CartService/EmptyCart"]
@@ -51,7 +60,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/frontend"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/frontend"]
     to:
       - operation:
           paths: ["/hipstershop.CheckoutService/PlaceOrder"]
@@ -69,7 +78,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/frontend", "cluster.local/ns/onlineboutique/sa/checkoutservice"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/frontend", "cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/checkoutservice"]
     to:
       - operation:
           paths: ["/hipstershop.CurrencyService/Convert", "/hipstershop.CurrencyService/GetSupportedCurrencies"]
@@ -87,7 +96,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/checkoutservice"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/checkoutservice"]
     to:
       - operation:
           paths: ["/hipstershop.EmailService/SendOrderConfirmation"]
@@ -105,7 +114,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/loadgenerator", "cluster.local/ns/asm-ingress/sa/asm-ingressgateway"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/loadgenerator", "cluster.local/ns/${INGRESS_GATEWAY_NAMESPACE}/sa/${INGRESS_GATEWAY_NAME}"]
     to:
       - operation:
           ports: ["8080"]
@@ -122,7 +131,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/checkoutservice"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/checkoutservice"]
     to:
       - operation:
           paths: ["/hipstershop.PaymentService/Charge"]
@@ -140,7 +149,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/frontend", "cluster.local/ns/onlineboutique/sa/checkoutservice", "cluster.local/ns/onlineboutique/sa/recommendationservice"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/frontend", "cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/checkoutservice", "cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/recommendationservice"]
     to:
       - operation:
           paths: ["/hipstershop.ProductCatalogService/GetProduct", "/hipstershop.ProductCatalogService/ListProducts"]
@@ -158,7 +167,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/frontend"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/frontend"]
     to:
       - operation:
           paths: ["/hipstershop.RecommendationService/ListRecommendations"]
@@ -176,7 +185,7 @@ spec:
   rules:
   - from:
     - source:
-        principals: ["cluster.local/ns/onlineboutique/sa/frontend", "cluster.local/ns/onlineboutique/sa/checkoutservice"]
+        principals: ["cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/frontend", "cluster.local/ns/${ONLINEBOUTIQUE_NAMESPACE}/sa/checkoutservice"]
     to:
       - operation:
           paths: ["/hipstershop.ShippingService/GetQuote", "/hipstershop.ShippingService/ShipOrder"]

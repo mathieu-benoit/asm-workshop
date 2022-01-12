@@ -2,8 +2,9 @@
 title: "Configure Sidecar for OnlineBoutique"
 weight: 1
 ---
+In this section you will configure `Sidecar` for the OnlineBoutique namespace.
 
-
+Run this command which allows to define fine granular `Sidecar` per app:
 ```Bash
 cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
 apiVersion: networking.istio.io/v1beta1
@@ -41,12 +42,12 @@ spec:
   egress:
   - hosts:
     - "istio-system/*"
-    - "./cartservice.onlineboutique.svc.cluster.local"
-    - "./currencyservice.onlineboutique.svc.cluster.local"
-    - "./emailservice.onlineboutique.svc.cluster.local"
-    - "./paymentservice.onlineboutique.svc.cluster.local"
-    - "./productcatalogservice.onlineboutique.svc.cluster.local"
-    - "./shippingservice.onlineboutique.svc.cluster.local"
+    - "./cartservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./currencyservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./emailservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./paymentservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./productcatalogservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./shippingservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Sidecar
@@ -83,13 +84,13 @@ spec:
   egress:
   - hosts:
     - "istio-system/*"
-    - "./adservice.onlineboutique.svc.cluster.local"
-    - "./cartservice.onlineboutique.svc.cluster.local"
-    - "./checkoutservice.onlineboutique.svc.cluster.local"
-    - "./currencyservice.onlineboutique.svc.cluster.local"
-    - "./productcatalogservice.onlineboutique.svc.cluster.local"
-    - "./recommendationservice.onlineboutique.svc.cluster.local"
-    - "./shippingservice.onlineboutique.svc.cluster.local"
+    - "./adservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./cartservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./checkoutservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./currencyservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./productcatalogservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./recommendationservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
+    - "./shippingservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Sidecar
@@ -102,7 +103,7 @@ spec:
   egress:
   - hosts:
     - "istio-system/*"
-    - "./frontend.onlineboutique.svc.cluster.local"
+    - "./frontend.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Sidecar
@@ -139,7 +140,7 @@ spec:
   egress:
   - hosts:
     - "istio-system/*"
-    - "./productcatalogservice.onlineboutique.svc.cluster.local"
+    - "./productcatalogservice.${ONLINEBOUTIQUE_NAMESPACE}.svc.cluster.local"
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: Sidecar

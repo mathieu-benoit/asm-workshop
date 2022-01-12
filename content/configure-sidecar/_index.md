@@ -8,3 +8,6 @@ In this section you will configure `Sidecar` in order to improve the performance
 {{% children showhidden="false" %}}
 
 _Note:`Sidecar` not supported by Istio's `Gateway`_
+
+Resources:
+- [Istio - Sidecar](https://istio.io/latest/docs/reference/config/networking/sidecar/)
