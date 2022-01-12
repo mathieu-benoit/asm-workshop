@@ -25,7 +25,7 @@ What it is not covered yet:
 - Muti-cluster Mesh
 - Multi-cluster Ingress and Service
 - Managed control and data plane
-- There is [this on-going backlog to improve this workshop]() too, feel free to contribute! ;)
+- There is [this on-going backlog to improve this workshop](https://github.com/mathieu-benoit/asm-workshop/issues) too, feel free to contribute! ;)
 
 This workshop uses the following billable components of Google Cloud:
 - [Compute Engine](https://cloud.google.com/compute/pricing)
