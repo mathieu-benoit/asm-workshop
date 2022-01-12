@@ -41,6 +41,9 @@ kubectl delete service redis -n $ONLINEBOUTIQUE_NAMESPACE
 You can connect to a Memorystore (redis) instance only from GKE clusters that are in the same region and use the same network as your instance. You cannot connect to a Memorystore (redis) instance from a GKE cluster without VPC-native/IP aliasing enabled. For this you should create a GKE cluster with this option `--enable-ip-alias`.
 {{% /notice %}}
 
+Here is the high-level setup you you just accomplished with this section:
+![ASM Security diagram](/images/onlineboutique-initial.png)
+
 Resources:
 - [Tutorial - Deploying the Online Boutique sample application](https://cloud.google.com/service-mesh/docs/onlineboutique-install-kpt)
 - [Connecting to Memorystore (redis) from GKE](https://cloud.google.com/memorystore/docs/redis/connect-redis-instance-gke)

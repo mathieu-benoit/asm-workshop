@@ -19,7 +19,7 @@ Agenda:
 - Troubleshoot Istio/ASM
 
 Here is the final high-level setup you will accomplish throughout this workshop:
-![ASM Security diagram](/images/asm-security.png)
+![ASM Security diagram](/images/onlineboutique-secured.png)
 
 What it is not covered yet:
 - Muti-cluster Mesh
