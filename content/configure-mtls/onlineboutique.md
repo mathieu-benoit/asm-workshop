@@ -1,10 +1,10 @@
 ---
-title: "Configure auto mTLS STRICT for OnlineBoutique"
+title: "Configure mTLS STRICT for OnlineBoutique"
 weight: 2
 ---
 
-{{%expand%}}
-```yaml
+```Bash
+cat <<EOF | kubectl apply -n $INGRESS_GATEWAY_NAMESPACE -f -
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
@@ -12,5 +12,5 @@ metadata:
 spec:
   mtls:
     mode: STRICT
+EOF
 ```
-{{% /expand%}}

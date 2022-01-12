@@ -1,10 +1,10 @@
 ---
-title: "Configure auto mTLS STRICT for Ingress Gateway"
+title: "Configure mTLS STRICT for Ingress Gateway"
 weight: 1
 ---
 
-{{%expand%}}
-```yaml
+```Bash
+cat <<EOF | kubectl apply -n $INGRESS_GATEWAY_NAMESPACE -f -
 apiVersion: security.istio.io/v1beta1
 kind: PeerAuthentication
 metadata:
@@ -12,5 +12,5 @@ metadata:
 spec:
   mtls:
     mode: STRICT
+EOF
 ```
-{{% /expand%}}

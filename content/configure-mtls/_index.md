@@ -1,5 +1,5 @@
 ---
-title: "Configure auto mTLS STRICT"
+title: "Configure mTLS STRICT"
 chapter: true
 weight: 6
 ---
