@@ -23,8 +23,8 @@ spec:
 EOF
 ~/asmcli install \
   --project_id $PROJECT_ID \
-  --cluster_name $CLUSTER_NAME \
-  --cluster_location $CLUSTER_ZONE \
+  --cluster_name $GKE_NAME \
+  --cluster_location $ZONE \
   --enable-all \
   --option cloud-tracing \
   --option cni-gcp \

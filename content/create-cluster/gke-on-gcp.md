@@ -20,7 +20,6 @@ for r in $GKE_ROLES; do gcloud projects add-iam-policy-binding $PROJECT_ID --mem
 
 Create the GKE cluster:
 ```Bash
-gcloud services enable container.googleapis.com
 gcloud container clusters create $GKE_NAME \
     --service-account $GKE_SA_ID \
     --workload-pool=$PROJECT_ID.svc.id.goog \
@@ -41,7 +40,6 @@ kubectl get nodes
 
 Register the GKE cluster as an Anthos fleet:
 ```Bash
-gcloud services enable anthos.googleapis.com
 gcloud container hub memberships register $GKE_NAME \
     --gke-cluster $ZONE/$GKE_NAME \
     --enable-workload-identity

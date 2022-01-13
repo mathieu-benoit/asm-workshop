@@ -6,12 +6,12 @@ Put this https://alwaysupalwayson.com/asm-security as a workshop.
 
 1. [X] Create a GKE cluster
 1. [X] Install ASM
-1. [ ] Ingress Gateway
+1. [X] Ingress Gateway
 1. [ ] Egress Gateway
-1. [ ] Install OnlineBoutique
-1. [ ] mTLS
-1. [ ] Sidecar
-1. [ ] AuthorizationPolicies
+1. [X] Install OnlineBoutique
+1. [X] mTLS
+1. [X] Sidecar
+1. [X] AuthorizationPolicies
 1. [ ] NetworkPolicies
 1. [ ] Policy Controller
 1. [ ] Config Sync

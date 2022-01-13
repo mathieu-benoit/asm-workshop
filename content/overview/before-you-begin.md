@@ -39,15 +39,17 @@ gcloud beta billing projects link $PROJECT_ID \
     --billing-account $BILLING_ACCOUNT_ID
 ```
 
-Choose the region and zone in which you want to deploy your GCP services:
+Enable the Google Cloud APIs required:
+```Bash
+gcloud services enable compute.googleapis.com
+gcloud services enable container.googleapis.com
+gcloud services enable anthos.googleapis.com
+```
+
+Set the region and zone in which you want to deploy your GCP services:
 ```Bash
 export REGION=us-east4
 export ZONE=us-east4-a
-```
-
-Set your default local `gcloud` configs:
-```Bash
-gcloud config set project $PROJECT_ID
 gcloud config set compute/region $REGION
 gcloud config set compute/zone $ZONE
 ```

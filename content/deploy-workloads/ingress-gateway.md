@@ -4,19 +4,25 @@ weight: 1
 ---
 In this section, you will deploy the Ingress Gateway in its own namespace as you will do for any other workload.
 
-Create the namespace:
+Init variables:
 ```Bash
 export INGRESS_GATEWAY_NAMESPACE=asm-ingress
-kubectl create namespace $INGRESS_GATEWAY_NAMESPACE
-ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
-kubectl label namespace $INGRESS_GATEWAY_NAMESPACE istio-injection- istio.io/rev=$ASM_VERSION --overwrite
-```
-
-Deploy the IngressGateway exposed (for now) as public endpoint (L4 load balancer):
-```Bash
+export ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
 export INGRESS_GATEWAY_NAME=asm-ingressgateway
 export INGRESS_GATEWAY_LABEL="asm: ingressgateway"
+```
+
+Deploy the Ingress Gateway in its own namespace exposed (for now) with public IP address (L4 load balancer):
+```Bash
 cat <<EOF | kubectl apply -n $INGRESS_GATEWAY_NAMESPACE -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${INGRESS_GATEWAY_NAMESPACE}
+  labels:
+    name: ${INGRESS_GATEWAY_NAMESPACE}
+    istio.io/rev: ${ASM_VERSION}
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -84,8 +90,8 @@ EOF
 Ensure that all deployments are up and running:
 ```Bash
 kubectl wait --for=condition=available --timeout=600s deployment --all -n $INGRESS_GATEWAY_NAMESPACE
-INGRESS_GATEWAY_PUBLIC_IP=$(kubectl get svc $INGRESS_GATEWAY_NAME -n $INGRESS_GATEWAY_NAMESPACE -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
-curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
+until kubectl get svc $INGRESS_GATEWAY_NAME -n $INGRESS_GATEWAY_NAMESPACE -o jsonpath='{.status.loadBalancer}' | grep "ingress"; do : ; done
+export INGRESS_GATEWAY_PUBLIC_IP=$(kubectl get svc $INGRESS_GATEWAY_NAME -n $INGRESS_GATEWAY_NAMESPACE -o jsonpath="{.status.loadBalancer.ingress[*].ip}")
 ```
 
 Create a [shared `Gateway`](https://istio.io/latest/docs/setup/additional-setup/gateway/#shared-gateway) resource in the Ingress Gateway namespace. Gateways are generally owned by the platform admins or network admins team. Therefore, the `Gateway` resource is created in the Ingress Gateway namespace owned by the platform admin and could be use in other namespaces via their own `VirtualService` entries.
