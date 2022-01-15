@@ -14,8 +14,8 @@ cd $WORKING_DIRECTORY
 ```
 
 Install the required tools:
-- `gcloud`
-- `kubectl`
+- [`gcloud`](https://cloud.google.com/sdk/docs/install)
+- [`kubectl`](https://kubernetes.io/docs/tasks/tools/#kubectl)
 - `istioctl`
 - `curl`
 

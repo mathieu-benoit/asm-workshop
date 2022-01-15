@@ -7,7 +7,6 @@ In this section, you will deploy the Ingress Gateway in its own namespace as you
 Init variables:
 ```Bash
 export INGRESS_GATEWAY_NAMESPACE=asm-ingress
-export ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
 export INGRESS_GATEWAY_NAME=asm-ingressgateway
 export INGRESS_GATEWAY_LABEL="asm: ingressgateway"
 ```
@@ -19,6 +18,8 @@ apiVersion: v1
 kind: Namespace
 metadata:
   name: ${INGRESS_GATEWAY_NAMESPACE}
+  annotations:
+    mesh.cloud.google.com/proxy: '{"managed": true}'
   labels:
     name: ${INGRESS_GATEWAY_NAMESPACE}
     istio.io/rev: ${ASM_VERSION}

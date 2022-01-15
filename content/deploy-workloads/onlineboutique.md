@@ -6,7 +6,14 @@ In this section, you will deploy the [OnlineBoutique](https://github.com/GoogleC
 
 ```Bash
 export ONLINEBOUTIQUE_NAMESPACE=onlineboutique
-kubectl create namespace $ONLINEBOUTIQUE_NAMESPACE
+cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${ONLINEBOUTIQUE_NAMESPACE}
+  labels:
+    name: ${ONLINEBOUTIQUE_NAMESPACE}
+EOF
 curl -LO https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/master/release/kubernetes-manifests.yaml > ~/$WORKING_DIRECTORY/onlineboutique.yaml
 kubectl apply -f ~/$WORKING_DIRECTORY/onlineboutique.yaml -n $ONLINEBOUTIQUE_NAMESPACE
 ```

@@ -26,3 +26,6 @@ gcloud compute ssl-policies create $SSL_POLICY_NAME \
     --profile COMPATIBLE  \
     --min-tls-version 1.0
 ```
+
+Resources:
+- [Google Cloud Armor WAF rule to help mitigate Apache Log4j vulnerability](https://cloud.google.com/blog/products/identity-security/cloud-armor-waf-rule-to-help-address-apache-log4j-vulnerability)

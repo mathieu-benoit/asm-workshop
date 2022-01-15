@@ -9,49 +9,57 @@ curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.12 > ~/asmcli
 chmod +x ~/asmcli
 ```
 
+Enable Managed ASM on your current project:
+```Bash
+gcloud container hub mesh enable
+```
+
 Run the `asmcli install` command:
 ```Bash
-cat <<EOF > distroless-proxy.yaml
----
-apiVersion: install.istio.io/v1alpha1
-kind: IstioOperator
-spec:
-  meshConfig:
-    defaultConfig:
-      image:
-        imageType: distroless
-EOF
+ASM_CHANNEL=rapid
+ASM_LABEL=asm-managed
+export ASM_VERSION=$ASM_LABEL-$ASM_CHANNEL
 ~/asmcli install \
   --project_id $PROJECT_ID \
   --cluster_name $GKE_NAME \
   --cluster_location $ZONE \
   --enable-all \
-  --option cloud-tracing \
-  --option cni-gcp \
-  --custom_overlay distroless-proxy.yaml
+  --managed \
+  --channel $ASM_CHANNEL \
+  --use_managed_cni
+```
+
+Apply the following Mesh configs (`distroless` container image for the proxy and Cloud Tracing):
+```Bash
+cat <<EOF | kubectl apply -n istio-system -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: istio-system
+---
+apiVersion: v1
+data:
+  mesh: |-
+    defaultConfig:
+      image:
+        imageType: distroless
+      tracing:
+        stackdriver:{}
+kind: ConfigMap
+metadata:
+  name: istio-${ASM_VERSION}
+EOF
 ```
 
 Ensure that all deployments are up and running:
 ```Bash
-kubectl wait --for=condition=available --timeout=600s deployment --all -n istio-system
+kubectl get controlplanerevision -n istio-system
+kubectl get dataplanecontrols
+kubectl get daemonset istio-cni-node -n kube-system
 kubectl wait --for=condition=available --timeout=600s deployment --all -n asm-system
 ```
 
-_Not part of the workshop, but here below is the routine when you will need to run to [upgrade to a newer version of ASM](https://cloud.google.com/service-mesh/docs/unified-install/plan-upgrade):_
-```Bash
-# Grab the current ASM version before upgrading to the new version
-OLD_ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
-# Doownload the new version of the `asmcli` tool
-curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.12 > ~/asmcli
-chmod +x ~/asmcli
-# Run the same `asmcli install` command we ran for the installation
-~/asmcli install...
-# Update the asm/istio labels of your namespaces
-kubectl rollout restart deployments -n FIXME
-# Once you have verified that your workloads and ASM is working properly, you could complete the upgrade of ASM by removing the the components of the old version
-kubectl delete Service,Deployment,HorizontalPodAutoscaler,PodDisruptionBudget istiod-$OLD_ASM_VERSION -n istio-system --ignore-not-found=true
-kubectl delete IstioOperator installed-state-$OLD_ASM_VERSION -n istio-system
-```
-
 Resources:
-- [Install ASM](https://cloud.google.com/service-mesh/docs/unified-install/install)
+- [ASM Release Notes](https://cloud.google.com/service-mesh/docs/release-notes)
+- [Configure Managed Anthos Service Mesh](https://cloud.google.com/service-mesh/docs/managed/service-mesh)
+- [Managed ASM Release Channel](https://cloud.google.com/service-mesh/docs/managed/release-channels)

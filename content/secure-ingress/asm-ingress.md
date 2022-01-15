@@ -88,4 +88,8 @@ spec:
 EOF
 ```
 
+```Bash
+kubectl get managedcertificate ${INGRESS_GATEWAY_NAME} -ojsonpath='{.status.certificateStatus}' -n $INGRESS_GATEWAY_NAMESPACE
+```
+
 FIXME - add a section with unprivileged deployment too + Rk about PSC/Internal LB.

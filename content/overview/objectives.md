@@ -9,7 +9,7 @@ This workshop is not an introduction to Istio nor Anthos Service Mesh (ASM), if 
 
 Agenda:
 - Create a GKE cluster
-- Install a secure ASM (Istio CNI, `distroless` proxy container image)
+- Install a secure Managed ASM (Managed Control Plane, Managed Data Plane, Istio CNI and `distroless` proxy container image)
 - Deploy workloads (OnlineBoutique)
 - Enable ASM for workloads (sidecar proxy injection)
 - Configure mTLS STRICT

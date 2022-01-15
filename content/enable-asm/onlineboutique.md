@@ -6,8 +6,17 @@ In this section, you will enable ASM for OnlineBoutique.
 
 Inject the Istio/ASM proxy within the OnlineBoutique namespace:
 ```Bash
-ASM_VERSION=$(kubectl get deploy -n istio-system -l app=istiod -o jsonpath={.items[*].metadata.labels.'istio\.io\/rev'}'{"\n"}')
-kubectl label namespace $ONLINEBOUTIQUE_NAMESPACE istio-injection- istio.io/rev=$ASM_VERSION --overwrite
+cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ${ONLINEBOUTIQUE_NAMESPACE}
+  annotations:
+    mesh.cloud.google.com/proxy: '{"managed": true}'
+  labels:
+    name: ${ONLINEBOUTIQUE_NAMESPACE}
+    istio.io/rev: ${ASM_VERSION}
+EOF
 kubectl rollout restart deployments -n $ONLINEBOUTIQUE_NAMESPACE
 ```
 
