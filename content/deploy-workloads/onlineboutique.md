@@ -2,7 +2,7 @@
 title: "Deploy OnlineBoutique"
 weight: 2
 ---
-In this section, you will deploy the [OnlineBoutique](https://github.com/GoogleCloudPlatform/microservices-demo) apps as-is, without any notion of Istio nor ASM, not yet.
+In this section, you will deploy the [OnlineBoutique](https://github.com/GoogleCloudPlatform/microservices-demo) apps _as-is_, without any notion of Istio nor ASM, not yet.
 
 Create the OnlineBoutique namespace:
 ```Bash

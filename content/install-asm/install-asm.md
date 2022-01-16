@@ -58,7 +58,11 @@ kubectl get controlplanerevision -n istio-system
 kubectl get dataplanecontrols
 kubectl get daemonset istio-cni-node -n kube-system
 kubectl wait --for=condition=available --timeout=600s deployment --all -n asm-system
-kubectl describe configmap env-$ASM_VERSION -n istio-system
+```
+
+Get the version of the ASM Control Plane:
+```Bash
+kubectl get configmap env-$ASM_VERSION -n istio-system -o yaml | grep "TAG"
 ```
 
 Resources:

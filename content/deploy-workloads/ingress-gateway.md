@@ -114,6 +114,11 @@ spec:
 EOF
 ```
 
+Get the version of the ASM `proxy`:
+```Bash
+kubectl describe pod -n $INGRESS_GATEWAY_NAMESPACE | grep "proxyv2:"
+```
+
 Resources:
 - [Istio - Installing Gateways](https://istio.io/latest/docs/setup/additional-setup/gateway)
 - [Docs - ASM Installing and upgrading gateways](https://cloud.google.com/service-mesh/docs/gateways)

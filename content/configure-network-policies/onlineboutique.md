@@ -262,3 +262,5 @@ spec:
   - {}
 EOF
 ```
+
+FIXME - Image in GCP Console

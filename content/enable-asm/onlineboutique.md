@@ -30,6 +30,11 @@ curl -s http://${ONLINEBOUTIQUE_PUBLIC_IP}
 When running `kubectl get pods -n $ONLINEBOUTIQUE_NAMESPACE` you should see `2/2` on the `READY` column for all the pods in the OnlineBoutique namespace.
 {{% /notice %}}
 
+Get the version of the ASM `proxy`:
+```Bash
+kubectl describe pod -n $INGRESS_GATEWAY_NAMESPACE | grep "proxyv2:"
+```
+
 Route traffic to the OnlineBoutique's `frontend` app through the Ingress Gateway:
 ```Bash
 cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
@@ -56,11 +61,13 @@ Ensure that the OnlineBoutique solution is now working from the Ingress Gateway 
 curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
 ```
 
-You could remove the `LoadBalancer` service `frontend-external` (not used moving forward) deployed earlier in this workshop:
+From her, you could now remove the `LoadBalancer` service `frontend-external` deployed earlier in this workshop:
 ```Bash
 kubectl delete service frontend-external -n $ONLINEBOUTIQUE_NAMESPACE
 rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/service_frontend-external.yaml
 ```
+
+FIXME - Image in GCP Console - Topology
 
 Resources:
 - [ASM - Injecting sidecar proxies](https://cloud.google.com/service-mesh/docs/proxy-injection)

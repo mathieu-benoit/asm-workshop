@@ -33,3 +33,5 @@ spec:
   egress:
   - {}
 ```
+
+FIXME - Image in GCP Console
