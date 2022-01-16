@@ -58,7 +58,8 @@ curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
 
 You could remove the `LoadBalancer` service `frontend-external` (not used moving forward) deployed earlier in this workshop:
 ```Bash
-kubectl delete service frontend-external -n -n $ONLINEBOUTIQUE_NAMESPACE
+kubectl delete service frontend-external -n $ONLINEBOUTIQUE_NAMESPACE
+rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/service_frontend-external.yaml
 ```
 
 Resources:

@@ -25,6 +25,6 @@ spec:
   rules:
   - to:
       - operation:
-          ports: ["8080"]
+          ports: ["80"]
 EOF
 ```

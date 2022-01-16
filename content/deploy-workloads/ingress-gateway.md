@@ -35,8 +35,6 @@ spec:
   ports:
   - port: 80
     name: http
-  - port: 443
-    name: https
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -53,6 +51,7 @@ spec:
         inject.istio.io/templates: gateway
       labels:
         ${INGRESS_GATEWAY_LABEL}
+        app: ${INGRESS_GATEWAY_NAME}
     spec:
       containers:
       - name: istio-proxy

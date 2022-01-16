@@ -4,6 +4,83 @@ weight: 2
 ---
 In this section we will configure `AuthorizationPolicy` for the OnlineBoutique namespace.
 
+Create Kubernetes `ServiceAccount` per app:
+```Bash
+cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: adservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: cartservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: checkoutservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: currencyservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: emailservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: loadgenerator
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: paymentservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: productcatalogservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: recommendationservice
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: shippingservice
+EOF
+```
+
+Replace the `default` `ServiceAccount` per app:
+```Bash
+services="adservice cartservice checkoutservice currencyservice emailservice frontend loadgenerator paymentservice productcatalogservice recommendationservice shippingservice"
+for s in $services; do sed -i "s/serviceAccountName: default/serviceAccountName: $s/g" ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_$s.yaml; done
+```
+
+Re-deploy the updated Kubernetes manifests updated:
+```Bash
+kubectl apply -f ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/ -n $ONLINEBOUTIQUE_NAMESPACE
+```
+
+Ensure that all deployments are still up and running:
+```Bash
+kubectl wait --for=condition=available --timeout=600s deployment --all -n $ONLINEBOUTIQUE_NAMESPACE
+curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
+```
+
 Deploy fine granular `AuthorizationPolicy` per app:
 ```Bash
 cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
@@ -192,4 +269,9 @@ spec:
           methods: ["POST"]
           ports: ["50051"]
 EOF
+```
+
+Test that the solution is still working properly:
+```Bash
+curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
 ```

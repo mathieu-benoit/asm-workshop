@@ -4,6 +4,7 @@ weight: 2
 ---
 In this section, you will deploy the [OnlineBoutique](https://github.com/GoogleCloudPlatform/microservices-demo) apps as-is, without any notion of Istio nor ASM, not yet.
 
+Create the OnlineBoutique namespace:
 ```Bash
 export ONLINEBOUTIQUE_NAMESPACE=onlineboutique
 cat <<EOF | kubectl apply -n $ONLINEBOUTIQUE_NAMESPACE -f -
@@ -14,8 +15,15 @@ metadata:
   labels:
     name: ${ONLINEBOUTIQUE_NAMESPACE}
 EOF
-curl -LO https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/master/release/kubernetes-manifests.yaml > ~/$WORKING_DIRECTORY/onlineboutique.yaml
-kubectl apply -f ~/$WORKING_DIRECTORY/onlineboutique.yaml -n $ONLINEBOUTIQUE_NAMESPACE
+```
+
+Retrieve and deploy the Kubernetes manifests of the OnlineBoutique apps:
+```Bash
+mkdir ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE
+curl https://raw.githubusercontent.com/GoogleCloudPlatform/microservices-demo/main/release/kubernetes-manifests.yaml > ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/tmp.yaml
+nomos hydrate --path ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/ --output ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE --no-api-server-check --source-format unstructured
+rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/tmp.yaml
+kubectl apply -f ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/ -n $ONLINEBOUTIQUE_NAMESPACE
 ```
 
 Ensure that all deployments are up and running:
@@ -25,13 +33,13 @@ ONLINEBOUTIQUE_PUBLIC_IP=$(kubectl get svc frontend-external -n $ONLINEBOUTIQUE_
 curl -s http://${ONLINEBOUTIQUE_PUBLIC_IP}
 ```
 
-In order to be more secure and have more resilience with the data stored in `redis`, we will instead leverage Memorystore (redis) instead:
+In order to be more secure and have more resilience with the data stored in `redis`, we will leverage Memorystore (redis) instead:
 ```Bash
 gcloud services enable redis.googleapis.com
-gcloud redis instances create cart --size=1 --region=$REGION --zone=$ZONE --redis-version=redis_6_X
+gcloud redis instances create cart --size=1 --region=$REGION --zone=$ZONE --redis-version=redis_6_x
 REDIS_IP=$(gcloud redis instances describe cart --region=$REGION --format='get(host)')
-sed -i "s/value: \"redis-cart:6379\"/value: \"$REDIS_IP\"/g" ~/$WORKING_DIRECTORY/onlineboutique.yaml
-kubectl apply -f ~/$WORKING_DIRECTORY/onlineboutique.yaml -n $ONLINEBOUTIQUE_NAMESPACE
+sed -i "s/redis-cart:6379/$REDIS_IP/g" ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_cartservice.yaml
+kubectl apply -f ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_cartservice.yaml -n $ONLINEBOUTIQUE_NAMESPACE
 ```
 
 Ensure that the solution is still working correctly with Memorystore (redis):
@@ -43,6 +51,8 @@ From there, the `redis` container originally deployed could now be deleted:
 ```Bash
 kubectl delete deployment redis -n $ONLINEBOUTIQUE_NAMESPACE
 kubectl delete service redis -n $ONLINEBOUTIQUE_NAMESPACE
+rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_redis-cart.yaml
+rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/service_redis-cart.yaml
 ```
 {{% notice note %}}
 You can connect to a Memorystore (redis) instance only from GKE clusters that are in the same region and use the same network as your instance. You cannot connect to a Memorystore (redis) instance from a GKE cluster without VPC-native/IP aliasing enabled. For this you should create a GKE cluster with this option `--enable-ip-alias`.

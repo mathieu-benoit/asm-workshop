@@ -17,6 +17,7 @@ Install the required tools:
 - [`gcloud`](https://cloud.google.com/sdk/docs/install)
 - [`kubectl`](https://kubernetes.io/docs/tasks/tools/#kubectl)
 - `istioctl`
+- [`nomos`](https://cloud.google.com/anthos-config-management/docs/how-to/nomos-command#installing)
 - `curl`
 
 Get the _Folder Id_ and _Billing Account Id_ you will use to create your GCP project:

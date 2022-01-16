@@ -40,6 +40,7 @@ metadata:
 apiVersion: v1
 data:
   mesh: |-
+    enableTracing: true
     defaultConfig:
       image:
         imageType: distroless
@@ -57,6 +58,7 @@ kubectl get controlplanerevision -n istio-system
 kubectl get dataplanecontrols
 kubectl get daemonset istio-cni-node -n kube-system
 kubectl wait --for=condition=available --timeout=600s deployment --all -n asm-system
+kubectl describe configmap env-$ASM_VERSION -n istio-system
 ```
 
 Resources:
