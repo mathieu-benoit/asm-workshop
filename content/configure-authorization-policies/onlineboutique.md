@@ -275,3 +275,7 @@ Test that the solution is still working properly:
 ```Bash
 curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
 ```
+
+Go to the GCP Console and see that your OnlineBoutique namespace has its _Service access control_ green:
+
+![OnlineBoutique - Service access control view in GCP Console](/images/onlineboutique-authz.png)

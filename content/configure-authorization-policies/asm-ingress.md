@@ -28,3 +28,7 @@ spec:
           ports: ["80"]
 EOF
 ```
+
+Go to the GCP Console and see that your Ingress Gateway namespace has its _Service access control_ green:
+
+![Ingress Gateway - Service access control view in GCP Console](/images/ingressgateway-authz.png)
