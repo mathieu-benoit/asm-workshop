@@ -34,6 +34,7 @@ Get the version of the ASM `proxy`:
 ```Bash
 kubectl describe pod -n $INGRESS_GATEWAY_NAMESPACE | grep "proxyv2:"
 ```
+You could also get the version of the ASM Control Plane and all the proxies via the [Cloud Monitoring's Metrics Explorer feature](https://cloud.google.com/service-mesh/docs/managed/service-mesh#verify_control_plane_metrics).
 
 Route traffic to the OnlineBoutique's `frontend` app through the Ingress Gateway:
 ```Bash
@@ -61,7 +62,7 @@ Ensure that the OnlineBoutique solution is now working from the Ingress Gateway 
 curl -s http://${INGRESS_GATEWAY_PUBLIC_IP}
 ```
 
-From her, you could now remove the `LoadBalancer` service `frontend-external` deployed earlier in this workshop:
+From here, you could now remove the `LoadBalancer` service `frontend-external` deployed earlier in this workshop:
 ```Bash
 kubectl delete service frontend-external -n $ONLINEBOUTIQUE_NAMESPACE
 rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/service_frontend-external.yaml
