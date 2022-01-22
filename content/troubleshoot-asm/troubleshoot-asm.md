@@ -51,3 +51,4 @@ Resources:
 - [Resolving managed Anthos Service Mesh issues](https://cloud.google.com/service-mesh/docs/managed/troubleshoot)
 - [Troubleshooting ASM](https://cloud.google.com/service-mesh/docs/troubleshooting/troubleshoot-intro)
 - [Managed Anthos Service Mesh supported features](https://cloud.google.com/service-mesh/docs/managed/supported-features-mcp)
+- [Accessing logs in Cloud Logging](https://cloud.google.com/service-mesh/docs/observability/accessing-logs)
