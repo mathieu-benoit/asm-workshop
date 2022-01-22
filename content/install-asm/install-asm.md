@@ -5,8 +5,8 @@ weight: 2
 
 Download `asmcli`:
 ```Bash
-curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.12 > ~/asmcli
-chmod +x ~/asmcli
+curl https://storage.googleapis.com/csm-artifacts/asm/asmcli_1.12 > ~/$WORKING_DIRECTORY/asmcli
+chmod +x ~/$WORKING_DIRECTORY/asmcli
 ```
 
 Enable Managed ASM on your current project:
@@ -19,7 +19,7 @@ Run the `asmcli install` command:
 ASM_CHANNEL=rapid
 ASM_LABEL=asm-managed
 export ASM_VERSION=$ASM_LABEL-$ASM_CHANNEL
-~/asmcli install \
+~/$WORKING_DIRECTORY/asmcli install \
   --project_id $PROJECT_ID \
   --cluster_name $GKE_NAME \
   --cluster_location $ZONE \
@@ -60,10 +60,7 @@ kubectl get daemonset istio-cni-node -n kube-system
 kubectl wait --for=condition=available --timeout=600s deployment --all -n asm-system
 ```
 
-Get the version of the ASM Control Plane:
-```Bash
-kubectl get configmap env-$ASM_VERSION -n istio-system -o yaml | grep "TAG"
-```
+To get the version of the ASM Control Plane, you can get them via the [Cloud Monitoring's Metrics Explorer feature](https://cloud.google.com/service-mesh/docs/managed/service-mesh#verify_control_plane_metrics).
 
 Resources:
 - [ASM Release Notes](https://cloud.google.com/service-mesh/docs/release-notes)
