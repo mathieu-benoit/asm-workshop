@@ -36,8 +36,9 @@ curl -s http://${ONLINEBOUTIQUE_PUBLIC_IP}
 In order to be more secure and have more resilience with the data stored in `redis`, we will leverage Memorystore (redis) instead:
 ```Bash
 gcloud services enable redis.googleapis.com
-gcloud redis instances create cart --size=1 --region=$REGION --zone=$ZONE --redis-version=redis_6_x
-REDIS_IP=$(gcloud redis instances describe cart --region=$REGION --format='get(host)')
+REDIS_NAME=cart
+gcloud redis instances create $REDIS_NAME --size=1 --region=$REGION --zone=$ZONE --redis-version=redis_6_x
+REDIS_IP=$(gcloud redis instances describe $REDIS_NAME --region=$REGION --format='get(host)')
 sed -i "s/redis-cart:6379/$REDIS_IP/g" ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_cartservice.yaml
 kubectl apply -f ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_cartservice.yaml -n $ONLINEBOUTIQUE_NAMESPACE
 ```
