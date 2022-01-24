@@ -38,8 +38,9 @@ In order to be more secure and have more resilience with the data stored in `red
 gcloud services enable redis.googleapis.com
 REDIS_NAME=cart
 gcloud redis instances create $REDIS_NAME --size=1 --region=$REGION --zone=$ZONE --redis-version=redis_6_x
-REDIS_IP=$(gcloud redis instances describe $REDIS_NAME --region=$REGION --format='get(host)')
-sed -i "s/redis-cart:6379/$REDIS_IP/g" ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_cartservice.yaml
+export REDIS_IP=$(gcloud redis instances describe $REDIS_NAME --region=$REGION --format='get(host)')
+export REDIS_PORT=$(gcloud redis instances describe $REDIS_NAME --region=$REGION --format='get(port)')
+sed -i "s/redis-cart:6379/$REDIS_IP:$REDIS_PORT/g" ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_cartservice.yaml
 kubectl apply -f ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_cartservice.yaml -n $ONLINEBOUTIQUE_NAMESPACE
 ```
 
