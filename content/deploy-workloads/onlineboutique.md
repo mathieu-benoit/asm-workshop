@@ -51,8 +51,8 @@ curl -s http://${ONLINEBOUTIQUE_PUBLIC_IP}
 
 From there, the `redis` container originally deployed could now be deleted:
 ```Bash
-kubectl delete deployment redis -n $ONLINEBOUTIQUE_NAMESPACE
-kubectl delete service redis -n $ONLINEBOUTIQUE_NAMESPACE
+kubectl delete deployment redis-cart -n $ONLINEBOUTIQUE_NAMESPACE
+kubectl delete service redis-cart -n $ONLINEBOUTIQUE_NAMESPACE
 rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/deployment_redis-cart.yaml
 rm ~/$WORKING_DIRECTORY/$ONLINEBOUTIQUE_NAMESPACE/service_redis-cart.yaml
 ```
