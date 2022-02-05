@@ -38,6 +38,7 @@ gcloud projects create $PROJECT_ID \
 gcloud config set project $PROJECT_ID
 gcloud beta billing projects link $PROJECT_ID \
     --billing-account $BILLING_ACCOUNT_ID
+export PROJECT_NUMBER==$(gcloud projects describe $PROJECT_ID --format='get(projectNumber)')
 ```
 
 Enable the Google Cloud APIs required:
